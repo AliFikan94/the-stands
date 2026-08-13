@@ -1,26 +1,405 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f6f7f5;
+  --bg-elevated: #ffffff;
+  --fg: #101311;
+  --fg-secondary: #69706b;
+  --fg-tertiary: #929a94;
+  --hairline: #dde1dd;
+
+  --accent: #0a9f55;
+  --accent-hover: #078847;
+  --accent-soft: #e7f6ed;
+
+  --orange: #f97316;
+
+  --radius: 20px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  background: var(--bg);
+  color: var(--fg);
+  letter-spacing: -0.012em;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ------------------------------
+   Layout
+------------------------------ */
+
+.container-apple {
+  width: min(1180px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+.container-apple-wide {
+  width: min(1440px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+/* ------------------------------
+   Typography
+------------------------------ */
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fg-secondary);
+}
+
+.display {
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  color: var(--fg);
+}
+
+.h2-apple {
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.body-apple {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.accent-text {
+  color: var(--accent);
+}
+
+/* ------------------------------
+   Brand
+------------------------------ */
+
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: #101311;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ------------------------------
+   Navigation
+------------------------------ */
+
+.nav-pill {
+  border: 0;
+  background: transparent;
+  padding: 9px 15px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-secondary);
+  transition: all 150ms ease;
+}
+
+.nav-pill:hover {
+  color: var(--fg);
+}
+
+.nav-pill-active {
+  background: var(--fg);
+  color: #ffffff;
+}
+
+/* ------------------------------
+   Status
+------------------------------ */
+
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+/* ------------------------------
+   Buttons
+------------------------------ */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fg);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 150ms ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--fg);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ------------------------------
+   Match strip
+------------------------------ */
+
+.match-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 58px;
+  padding: 0 18px;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 8px 30px rgba(16, 19, 17, 0.035);
+}
+
+/* ------------------------------
+   Feed
+------------------------------ */
+
+.feed-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 680px) 280px;
+  justify-content: center;
+  gap: 32px;
+  align-items: start;
+}
+
+.side-card {
+  padding: 20px;
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 8px 30px rgba(16, 19, 17, 0.035);
+}
+
+.side-card-dark {
+  background: #101311;
+  border-color: #101311;
+  color: #ffffff;
+}
+
+.composer-card,
+.rant-card {
+  border: 1px solid var(--hairline);
+  background: var(--bg-elevated);
+  border-radius: 22px;
+  box-shadow:
+    0 1px 2px rgba(16, 19, 17, 0.025),
+    0 12px 40px rgba(16, 19, 17, 0.035);
+}
+
+.rant-card {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rant-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 2px 4px rgba(16, 19, 17, 0.035),
+    0 18px 50px rgba(16, 19, 17, 0.06);
+}
+
+.club-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #087a42;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 11px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg-secondary);
+  font-size: 13px;
+  transition: all 150ms ease;
+}
+
+.action-button:hover {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.action-button.liked {
+  background: #fff0f0;
+  color: #e5484d;
+}
+
+.media-frame {
+  overflow: hidden;
+  border-radius: 17px;
+  background: #111111;
+}
+
+/* ------------------------------
+   Responsive
+------------------------------ */
+
+@media (max-width: 1100px) {
+  .feed-layout {
+    grid-template-columns: minmax(0, 680px);
+  }
+}
+
+@media (max-width: 900px) {
+  .container-apple {
+    width: min(100% - 40px, 680px);
+  }
+
+  .container-apple-wide {
+    width: calc(100% - 40px);
+  }
+
+  .feed-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .container-apple,
+  .container-apple-wide {
+    width: calc(100% - 28px);
+  }
+
+  .display {
+    font-size: 46px;
+  }
+
+  .body-apple {
+    font-size: 16px;
+  }
+
+  .match-strip {
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .match-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .composer-card,
+  .rant-card {
+    border-radius: 18px;
+  }
+
+  .action-button {
+    min-height: 42px;
+    padding-inline: 9px;
+  }
+
+  .btn-primary {
+    min-height: 46px;
+  }
 }

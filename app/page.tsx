@@ -1,65 +1,194 @@
-import Image from "next/image";
+'use client'
+
+import { useState, useCallback } from 'react'
+import { RantComposer } from '@/components/rant/RantComposer'
+import { RantFeed, type Rant } from '@/components/rant/RantFeed'
+import { WalletButton } from '@/components/common/WalletButton'
+
+const TRENDING_CLUBS = [
+  ['#PSG', '842 rants'],
+  ['#ARS', '621 rants'],
+  ['#MCI', '504 rants'],
+  ['#BAR', '388 rants'],
+] as const
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<'feed' | 'marketplace'>('feed')
+  const [newRants, setNewRants] = useState<Rant[]>([])
+
+  // Memoize callback to prevent unnecessary re-renders in children
+  const handleRantPosted = useCallback((rant: Rant) => {
+    setNewRants((current) => [rant, ...current])
+  }, [])
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-[var(--bg)]">
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 border-b border-[var(--hairline)] bg-[var(--bg)]/85 backdrop-blur-2xl">
+        <div className="container-apple-wide h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="brand-mark">
+            <img src="/images/standup.png" alt="TheStands" />
+</div>
+
+            <div>
+              <div className="text-[17px] font-semibold tracking-[-0.03em]">
+                TheStands
+              </div>
+              <div className="hidden sm:block text-[10px] uppercase tracking-[0.16em] text-[var(--fg-tertiary)]">
+                Football. Unfiltered.
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop & Mobile Navigation Switcher */}
+          <nav 
+            className="flex items-center gap-1 rounded-full border border-[var(--hairline)] bg-white/70 p-1"
+            aria-label="Main Navigation"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <button
+              type="button"
+              onClick={() => setActiveTab('feed')}
+              aria-current={activeTab === 'feed' ? 'page' : undefined}
+              className={`nav-pill ${activeTab === 'feed' ? 'nav-pill-active' : ''}`}
+            >
+              The Feed
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('marketplace')}
+              aria-current={activeTab === 'marketplace' ? 'page' : undefined}
+              className={`nav-pill ${activeTab === 'marketplace' ? 'nav-pill-active' : ''}`}
+            >
+              Marketplace
+            </button>
+          </nav>
+
+          <WalletButton />
         </div>
-      </main>
+      </header>
+
+      {activeTab === 'feed' ? (
+        <>
+          {/* Hero */}
+          <section className="container-apple pt-14 md:pt-20 pb-10">
+            <div className="max-w-4xl">
+              <div className="flex items-center gap-2 mb-5">
+                <span className="live-dot" aria-hidden="true" />
+                <span className="eyebrow text-[var(--accent)]">
+                  THE FOOTBALL STANDS
+                </span>
+              </div>
+
+              <h1 className="display max-w-3xl">
+                Say what every{' '}
+                <span className="accent-text">fan</span>{' '}
+                is thinking.
+              </h1>
+
+              <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-5">
+                <p className="body-apple text-[var(--fg-secondary)] max-w-2xl">
+                  Hot takes, matchday banter and football arguments worth
+                  having. Post it. Own it. Defend it.
+                </p>
+
+                <a href="#composer" className="btn-primary shrink-0">
+                  Start a rant
+                </a>
+              </div>
+            </div>
+
+            {/* Match strip */}
+            <div className="match-strip mt-10">
+              <div className="flex items-center gap-3">
+                <span className="live-dot" aria-hidden="true" />
+                <span className="text-[12px] font-semibold uppercase tracking-[0.12em]">
+                  Matchday
+                </span>
+              </div>
+
+              <div className="hidden sm:block h-5 w-px bg-[var(--hairline)]" aria-hidden="true" />
+
+              <div className="flex items-center gap-2 text-[14px]">
+                <strong>ARS</strong>
+                <span className="text-[var(--fg-tertiary)]">vs</span>
+                <strong>MCI</strong>
+              </div>
+
+              <div className="hidden sm:block text-[13px] text-[var(--fg-secondary)]">
+                The stands are talking
+              </div>
+
+              <div className="sm:ml-auto text-[13px] font-medium text-[var(--accent)]">
+                1,284 rants today &rarr;
+              </div>
+            </div>
+          </section>
+
+          {/* Main content */}
+          <main className="container-apple pb-24">
+            <div className="feed-layout">
+              <div className="min-w-0">
+                {/* Target anchor for smooth scrolling */}
+                <div id="composer" className="scroll-mt-24">
+                  <RantComposer onPosted={handleRantPosted} />
+                </div>
+
+                <RantFeed extraRants={newRants} />
+              </div>
+
+              {/* Desktop sidebar */}
+              <aside className="hidden lg:block space-y-4">
+                <div className="side-card">
+                  <p className="eyebrow mb-4">TRENDING CLUBS</p>
+
+                  <div className="space-y-2">
+                    {TRENDING_CLUBS.map(([club, count]) => (
+                      <div
+                        key={club}
+                        className="flex items-center justify-between py-2"
+                      >
+                        <span className="font-semibold text-[14px]">
+                          {club}
+                        </span>
+                        <span className="text-[12px] text-[var(--fg-tertiary)]">
+                          {count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="side-card side-card-dark">
+                  <p className="eyebrow mb-3 text-white/50">THE STANDS</p>
+                  <p className="text-[20px] leading-tight font-semibold tracking-[-0.03em]">
+                    The best football conversations aren&apos;t polite.
+                  </p>
+                  <p className="text-[13px] text-white/55 mt-3 leading-relaxed">
+                    Bring your take. Just be ready to defend it.
+                  </p>
+                </div>
+              </aside>
+            </div>
+          </main>
+        </>
+      ) : (
+        <main className="container-apple py-24">
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-4">MARKETPLACE</p>
+            <h1 className="display mb-5">
+              Own the takes
+              <br />
+              worth remembering.
+            </h1>
+            <p className="body-apple text-[var(--fg-secondary)]">
+              The Banter marketplace is coming soon. Mint the takes that
+              become part of football history.
+            </p>
+          </div>
+        </main>
+      )}
     </div>
-  );
+  )
 }
