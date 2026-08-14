@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import Link from 'next/link'
 import { RantComposer } from '@/components/rant/RantComposer'
 import { RantFeed, type Rant } from '@/components/rant/RantFeed'
 import { WalletButton } from '@/components/common/WalletButton'
@@ -28,8 +29,8 @@ export default function Home() {
         <div className="container-apple-wide h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="brand-mark">
-            <img src="/images/standup.png" alt="TheStands" />
-</div>
+              <img src="/images/standup.png" alt="TheStands" />
+            </div>
 
             <div>
               <div className="text-[17px] font-semibold tracking-[-0.03em]">
@@ -42,24 +43,31 @@ export default function Home() {
           </div>
 
           {/* Desktop & Mobile Navigation Switcher */}
-          <nav 
+          {/* Main Navigation */}
+          <nav
             className="flex items-center gap-1 rounded-full border border-[var(--hairline)] bg-white/70 p-1"
             aria-label="Main Navigation"
           >
             <button
               type="button"
               onClick={() => setActiveTab('feed')}
-              aria-current={activeTab === 'feed' ? 'page' : undefined}
-              className={`nav-pill ${activeTab === 'feed' ? 'nav-pill-active' : ''}`}
+              className={`nav-pill ${
+                activeTab === 'feed' ? 'nav-pill-active' : ''
+              }`}
             >
-              The Feed
+              Feed
             </button>
+
+            <Link href="/arena" className="nav-pill">
+              Arena
+            </Link>
 
             <button
               type="button"
               onClick={() => setActiveTab('marketplace')}
-              aria-current={activeTab === 'marketplace' ? 'page' : undefined}
-              className={`nav-pill ${activeTab === 'marketplace' ? 'nav-pill-active' : ''}`}
+              className={`nav-pill ${
+                activeTab === 'marketplace' ? 'nav-pill-active' : ''
+              }`}
             >
               Marketplace
             </button>
@@ -82,9 +90,7 @@ export default function Home() {
               </div>
 
               <h1 className="display max-w-3xl">
-                Say what every{' '}
-                <span className="accent-text">fan</span>{' '}
-                is thinking.
+                Say what every <span className="accent-text">fan</span> is thinking.
               </h1>
 
               <div className="mt-6 flex flex-col sm:flex-row sm:items-center gap-5">
@@ -108,7 +114,10 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="hidden sm:block h-5 w-px bg-[var(--hairline)]" aria-hidden="true" />
+              <div
+                className="hidden sm:block h-5 w-px bg-[var(--hairline)]"
+                aria-hidden="true"
+              />
 
               <div className="flex items-center gap-2 text-[14px]">
                 <strong>ARS</strong>
