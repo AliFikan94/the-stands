@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "TheStands — Football rants, on-chain.",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased min-h-screen bg-[var(--bg)] text-[var(--fg)]">
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
