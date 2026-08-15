@@ -42,21 +42,20 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Desktop & Mobile Navigation Switcher */}
           {/* Main Navigation */}
           <nav
             className="flex items-center gap-1 rounded-full border border-[var(--hairline)] bg-white/70 p-1"
             aria-label="Main Navigation"
           >
-            <button
-              type="button"
+            <Link
+              href="/"
               onClick={() => setActiveTab('feed')}
               className={`nav-pill ${
                 activeTab === 'feed' ? 'nav-pill-active' : ''
               }`}
             >
               Feed
-            </button>
+            </Link>
 
             <Link href="/arena" className="nav-pill">
               Arena
