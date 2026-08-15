@@ -12,6 +12,7 @@ import {
   type Rivalry,
 } from './RivalryCard'
 import { RivalryRoom } from './RivalryRoom'
+import { AIRoast } from './AIRoast'
 
 const rivalries: Rivalry[] = [
   {
@@ -122,6 +123,15 @@ export function ArenaFeed() {
 
         <div className="absolute -right-20 -bottom-32 w-[300px] h-[300px] rounded-full border-[50px] border-[var(--accent)]/20" />
         <div className="absolute -right-5 -bottom-20 w-[180px] h-[180px] rounded-full border-[30px] border-white/5" />
+      </div>
+
+      {/* AI Roast */}
+      <div className="mt-6">
+        <AIRoast
+          onPost={(roast) => {
+            console.log('Roast posted:', roast)
+          }}
+        />
       </div>
 
       {/* Section heading */}
