@@ -8,6 +8,7 @@ import {
   MessageCircle,
   Trophy,
 } from 'lucide-react'
+import { AIRoast } from '@/components/arena/AIRoast'
 
 const RIVALRIES = [
   {
@@ -133,15 +134,21 @@ export default function ArenaPage() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                className="btn-primary w-full mt-5"
-              >
+              <button type="button" className="btn-primary w-full mt-5">
                 Enter Arena
               </button>
             </article>
           ))}
         </div>
+
+        {/* AI Roast */}
+        <section id="ai-roast" className="mt-8 scroll-mt-24">
+          <AIRoast
+            onPost={(roast) => {
+              console.log('AI Roast posted:', roast)
+            }}
+          />
+        </section>
 
         {/* Talk Trash */}
         <section className="side-card side-card-dark mt-8">
@@ -149,9 +156,7 @@ export default function ArenaPage() {
             <div className="flex items-center gap-2 mb-4">
               <Trophy className="w-5 h-5 text-white/70" />
 
-              <p className="eyebrow text-white/50">
-                TALK TRASH
-              </p>
+              <p className="eyebrow text-white/50">TALK TRASH</p>
             </div>
 
             <h2 className="text-[28px] sm:text-[36px] font-bold tracking-[-0.045em] leading-tight">
@@ -159,12 +164,17 @@ export default function ArenaPage() {
             </h2>
 
             <p className="text-[14px] text-white/55 mt-4 leading-relaxed">
-              Enter a rivalry, drop your take and let the fans decide
-              who won the exchange.
+              Enter a rivalry, drop your take and let the fans decide who
+              won the exchange.
             </p>
 
             <button
               type="button"
+              onClick={() => {
+                document
+                  .getElementById('ai-roast')
+                  ?.scrollIntoView({ behavior: 'smooth' })
+              }}
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-white text-[var(--fg)] px-5 min-h-[44px] text-[13px] font-bold hover:opacity-90 transition-opacity"
             >
               <MessageCircle className="w-4 h-4" />
