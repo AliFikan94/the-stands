@@ -9,7 +9,7 @@ import { FanBadge } from './FanBadge'
 export function FanIdentityCard({
   clubs,
 }: {
-  clubs: { code: string; label: string; color: string }[]
+  clubs: { code: string; label: string; nickname: string; emoji: string; color: string }[]
 }) {
   const { profile, tier, isWallet, verify, isVerifying, verifyError } =
     useFanProfile()
@@ -47,6 +47,7 @@ export function FanIdentityCard({
           tier={topBadge?.tier || 'bronze'}
           label={topBadge?.name || 'No badge yet'}
           monogram={topBadge ? topBadge.name.slice(0, 2).toUpperCase() : '?'}
+          emoji={topBadge?.emoji}
           locked={!topBadge}
           size={104}
         />
@@ -69,8 +70,9 @@ export function FanIdentityCard({
               <FanBadge
                 key={club.code}
                 tier="gold"
-                label={club.label}
+                label={club.nickname}
                 monogram={club.code}
+                emoji={club.emoji}
                 accentColor={club.color}
                 locked={!verifiedClubs.includes(club.code)}
                 size={72}
@@ -86,7 +88,7 @@ export function FanIdentityCard({
             >
               {clubs.map((club) => (
                 <option key={club.code} value={club.code}>
-                  {club.label}
+                  {club.emoji} {club.label} — {club.nickname}
                 </option>
               ))}
             </select>

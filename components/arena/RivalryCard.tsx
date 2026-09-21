@@ -2,6 +2,7 @@
 
 import { Flame, MessageCircle, Users, ArrowRight } from 'lucide-react'
 import type { Rivalry } from '@/lib/rivalries'
+import { getClub } from '@/lib/clubs'
 
 export type { Rivalry }
 
@@ -23,12 +24,12 @@ export function RivalryCard({
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2">
-            <div className="w-11 h-11 rounded-full bg-[#101311] text-white flex items-center justify-center text-[11px] font-black border-2 border-white">
-              {rivalry.homeShort}
+            <div className="w-11 h-11 rounded-full bg-[#101311] text-white flex items-center justify-center text-[17px] border-2 border-white">
+              {getClub(rivalry.homeShort)?.emoji ?? rivalry.homeShort}
             </div>
 
-            <div className="w-11 h-11 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[11px] font-black border-2 border-white">
-              {rivalry.awayShort}
+            <div className="w-11 h-11 rounded-full bg-[var(--accent)] text-white flex items-center justify-center text-[17px] border-2 border-white">
+              {getClub(rivalry.awayShort)?.emoji ?? rivalry.awayShort}
             </div>
           </div>
 

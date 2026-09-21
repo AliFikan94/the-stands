@@ -14,6 +14,7 @@ export function FanBadge({
   tier,
   label,
   monogram,
+  emoji,
   accentColor,
   size = 112,
   locked = false,
@@ -21,6 +22,7 @@ export function FanBadge({
   tier: BadgeTier
   label?: string
   monogram: string
+  emoji?: string
   accentColor?: string
   size?: number
   locked?: boolean
@@ -109,6 +111,13 @@ export function FanBadge({
           <div className="absolute inset-0 rounded-full flex items-center justify-center">
             {locked ? (
               <Lock className="w-1/3 h-1/3 text-white/70" strokeWidth={2.2} />
+            ) : emoji ? (
+              <span
+                className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+                style={{ fontSize: size * 0.44, lineHeight: 1 }}
+              >
+                {emoji}
+              </span>
             ) : (
               <span
                 className="font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"

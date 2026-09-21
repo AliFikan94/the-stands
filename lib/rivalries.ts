@@ -1,3 +1,5 @@
+import { getClub } from './clubs'
+
 export type Rivalry = {
   id: string
   home: string
@@ -66,25 +68,41 @@ export const RIVALRIES: Rivalry[] = [
   },
 ]
 
-export type Club = { code: string; label: string; color: string }
+export type Club = {
+  code: string
+  label: string
+  nickname: string
+  emoji: string
+  color: string
+}
+
+function toClub(code: string, name: string, color: string): Club {
+  const info = getClub(code)
+
+  return {
+    code,
+    label: name,
+    nickname: info?.nickname ?? name,
+    emoji: info?.emoji ?? code,
+    color,
+  }
+}
 
 export function getAllClubs(rivalries: Rivalry[]): Club[] {
   const seen = new Map<string, Club>()
 
   for (const rivalry of rivalries) {
     if (!seen.has(rivalry.homeShort)) {
-      seen.set(rivalry.homeShort, {
-        code: rivalry.homeShort,
-        label: rivalry.home,
-        color: rivalry.color,
-      })
+      seen.set(
+        rivalry.homeShort,
+        toClub(rivalry.homeShort, rivalry.home, rivalry.color)
+      )
     }
     if (!seen.has(rivalry.awayShort)) {
-      seen.set(rivalry.awayShort, {
-        code: rivalry.awayShort,
-        label: rivalry.away,
-        color: rivalry.color,
-      })
+      seen.set(
+        rivalry.awayShort,
+        toClub(rivalry.awayShort, rivalry.away, rivalry.color)
+      )
     }
   }
 

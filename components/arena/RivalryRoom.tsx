@@ -15,6 +15,7 @@ import { useAwardUpvote } from '@/hooks/useLeaderboard'
 import { BadgeUnlockToast } from '@/components/identity/BadgeUnlockToast'
 import type { Badge } from '@/lib/points'
 import { formatFanId } from '@/lib/utils'
+import { getClub } from '@/lib/clubs'
 
 type Message = {
   id: number
@@ -125,8 +126,9 @@ export function RivalryRoom({
               </div>
 
               <h2 className="text-[26px] sm:text-[32px] font-bold tracking-[-0.04em] mt-2">
+                {getClub(rivalry.homeShort)?.emoji}{' '}
                 {rivalry.home} <span className="text-white/30">vs</span>{' '}
-                {rivalry.away}
+                {rivalry.away} {getClub(rivalry.awayShort)?.emoji}
               </h2>
 
               <p className="text-[13px] text-white/55 mt-2">
@@ -194,8 +196,8 @@ export function RivalryRoom({
                 return (
                   <div key={message.id} className="px-5 sm:px-7 py-5">
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
-                        {message.team}
+                      <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[15px] shrink-0">
+                        {getClub(message.team)?.emoji ?? message.team}
                       </div>
 
                       <div className="min-w-0 flex-1">

@@ -1,3 +1,5 @@
+import { getClub } from './clubs'
+
 // Points economy and badge catalog for Arena fan identity/reputation.
 //
 // Design intent (from product direction): peer-validated actions (reactions
@@ -28,6 +30,7 @@ export type Badge = {
   description: string
   category: BadgeCategory
   tier: BadgeTier
+  emoji: string
   club?: string
 }
 
@@ -38,6 +41,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: 'Posted your first take in a rivalry room',
     category: 'activity',
     tier: 'bronze',
+    emoji: '🩸',
   },
   {
     id: 'crowd-favorite',
@@ -45,6 +49,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: 'One of your takes hit 25 reactions',
     category: 'activity',
     tier: 'silver',
+    emoji: '⭐',
   },
   {
     id: 'derby-regular',
@@ -52,6 +57,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: 'Checked into 3 matchday rooms',
     category: 'activity',
     tier: 'bronze',
+    emoji: '🎟️',
   },
   {
     id: 'derby-veteran',
@@ -59,6 +65,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: 'Checked into 10 matchday rooms',
     category: 'activity',
     tier: 'silver',
+    emoji: '🎖️',
   },
   {
     id: 'derby-legend',
@@ -66,6 +73,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: 'Checked into 25 matchday rooms',
     category: 'activity',
     tier: 'gold',
+    emoji: '🏆',
   },
   {
     id: 'on-fire',
@@ -73,6 +81,7 @@ export const BADGE_CATALOG: Badge[] = [
     description: '3-matchday attendance streak',
     category: 'activity',
     tier: 'bronze',
+    emoji: '🔥',
   },
   {
     id: 'unstoppable',
@@ -80,16 +89,21 @@ export const BADGE_CATALOG: Badge[] = [
     description: '10-matchday attendance streak',
     category: 'activity',
     tier: 'gold',
+    emoji: '⚡',
   },
 ]
 
 export function clubIdentityBadge(club: string): Badge {
+  const info = getClub(club)
+  const nickname = info?.nickname ?? club
+
   return {
     id: `verified-${club.toLowerCase()}`,
-    name: `Verified ${club}`,
-    description: `Confirmed ${club} Fan Token holder`,
+    name: `Verified ${nickname}`,
+    description: `Confirmed ${info?.name ?? club} Fan Token holder`,
     category: 'identity',
     tier: 'gold',
+    emoji: info?.emoji ?? '🛡️',
     club,
   }
 }

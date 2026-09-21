@@ -5,6 +5,7 @@ import { Trophy } from 'lucide-react'
 import { useLeaderboard } from '@/hooks/useLeaderboard'
 import { formatFanId } from '@/lib/utils'
 import { useFanId } from '@/hooks/useFanId'
+import { getClub } from '@/lib/clubs'
 
 export function Leaderboard({
   clubs = [],
@@ -49,14 +50,23 @@ export function Leaderboard({
         </p>
       ) : (
         <div className="space-y-3">
-          {entries.map((entry, index) => (
+          {entries.map((entry, index) => {
+            const repClub = entry.verifiedClubs[0]
+              ? getClub(entry.verifiedClubs[0])
+              : undefined
+
+            return (
             <div key={entry.id} className="flex items-center gap-3">
               <span className="text-[11px] font-black text-[var(--fg-tertiary)] w-4 shrink-0">
                 {index + 1}
               </span>
 
               <div className="w-8 h-8 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
-                {entry.id.slice(0, 2).toUpperCase()}
+                {repClub ? (
+                  <span className="text-[15px]">{repClub.emoji}</span>
+                ) : (
+                  entry.id.slice(0, 2).toUpperCase()
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
@@ -75,7 +85,8 @@ export function Leaderboard({
                 {entry.points}
               </span>
             </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>

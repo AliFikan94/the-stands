@@ -26,7 +26,12 @@ export function BadgeUnlockToast({
           key={badge.id}
           className="side-card flex items-center gap-3 !py-3 !px-4 badge-toast-in"
         >
-          <FanBadge tier={badge.tier} monogram={badge.name.slice(0, 2).toUpperCase()} size={44} />
+          <FanBadge
+            tier={badge.tier}
+            monogram={badge.name.slice(0, 2).toUpperCase()}
+            emoji={badge.emoji}
+            size={44}
+          />
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]">
               Badge unlocked
