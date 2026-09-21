@@ -1,19 +1,9 @@
 'use client'
 
 import { Flame, MessageCircle, Users, ArrowRight } from 'lucide-react'
+import type { Rivalry } from '@/lib/rivalries'
 
-export type Rivalry = {
-  id: string
-  home: string
-  away: string
-  homeShort: string
-  awayShort: string
-  color: string
-  description: string
-  members: number
-  messages: number
-  heat: number
-}
+export type { Rivalry }
 
 type RivalryCardProps = {
   rivalry: Rivalry

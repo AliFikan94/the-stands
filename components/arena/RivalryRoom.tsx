@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ArrowLeft,
   Flame,
@@ -9,6 +9,12 @@ import {
   Users,
 } from 'lucide-react'
 import type { Rivalry } from './RivalryCard'
+import { useFanId } from '@/hooks/useFanId'
+import { useFanProfile } from '@/hooks/useFanProfile'
+import { useAwardUpvote } from '@/hooks/useLeaderboard'
+import { BadgeUnlockToast } from '@/components/identity/BadgeUnlockToast'
+import type { Badge } from '@/lib/points'
+import { formatFanId } from '@/lib/utils'
 
 type Message = {
   id: number
@@ -16,31 +22,14 @@ type Message = {
   team: string
   text: string
   votes: number
+  authorFanId?: string
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    user: '0x8f3...aB9',
-    team: 'ARS',
-    text: '90 minutes of football and somehow we still found a way to make this stressful.',
-    votes: 42,
-  },
-  {
-    id: 2,
-    user: '0xB2c...F71',
-    team: 'CHE',
-    text: 'At least we know how to finish our chances 😭',
-    votes: 31,
-  },
-  {
-    id: 3,
-    user: '0x91a...C22',
-    team: 'ARS',
-    text: 'Talk now. The table will talk later.',
-    votes: 67,
-  },
-]
+// Rooms start empty rather than pre-seeded with fake takes: every message
+// here needs a real fan id behind it so reactions can actually credit
+// someone's points, and a fake "top take" that can never be voted on reads
+// as broken, not lively.
+const initialMessages: Message[] = []
 
 export function RivalryRoom({
   rivalry,
@@ -51,38 +40,71 @@ export function RivalryRoom({
 }) {
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [draft, setDraft] = useState('')
+  const [unlockedBadges, setUnlockedBadges] = useState<Badge[]>([])
 
-  const sendMessage = () => {
+  const { id: fanId } = useFanId()
+  const { tier, checkIn, post } = useFanProfile()
+  const awardUpvote = useAwardUpvote()
+
+  const fixtureClubs = [rivalry.homeShort, rivalry.awayShort]
+  const hasCheckedIn = useRef(false)
+
+  useEffect(() => {
+    if (!fanId || hasCheckedIn.current) return
+    hasCheckedIn.current = true
+
+    checkIn(fixtureClubs).then((result) => {
+      if (result.newBadges.length > 0) {
+        setUnlockedBadges((current) => [...current, ...result.newBadges])
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fanId])
+
+  const sendMessage = async () => {
     const text = draft.trim()
 
-    if (!text) return
+    if (!text || !fanId) return
 
     setMessages((current) => [
       ...current,
       {
         id: Date.now(),
-        user: 'You',
+        user: formatFanId(fanId),
         team: rivalry.homeShort,
         text,
         votes: 0,
+        authorFanId: fanId,
       },
     ])
 
     setDraft('')
+
+    const result = await post(fixtureClubs)
+    if (result.newBadges.length > 0) {
+      setUnlockedBadges((current) => [...current, ...result.newBadges])
+    }
   }
 
-  const voteMessage = (id: number) => {
+  const voteMessage = (message: Message) => {
+    if (!message.authorFanId || message.authorFanId === fanId) return
+
     setMessages((current) =>
-      current.map((message) =>
-        message.id === id
-          ? { ...message, votes: message.votes + 1 }
-          : message
+      current.map((item) =>
+        item.id === message.id ? { ...item, votes: item.votes + 1 } : item
       )
     )
+
+    awardUpvote.mutate({ authorId: message.authorFanId, clubs: fixtureClubs })
   }
 
   return (
     <section className="mt-8">
+      <BadgeUnlockToast
+        badges={unlockedBadges}
+        onDismiss={() => setUnlockedBadges([])}
+      />
+
       <button
         type="button"
         onClick={onBack}
@@ -109,6 +131,13 @@ export function RivalryRoom({
 
               <p className="text-[13px] text-white/55 mt-2">
                 The rivalry is live. Make your case.
+                {tier && (
+                  <span className="text-white/40">
+                    {' '}
+                    · You&apos;re in as {tier.name} · verified{' '}
+                    {rivalry.homeShort}/{rivalry.awayShort} fans earn 1.25x
+                  </span>
+                )}
               </p>
             </div>
 
@@ -147,53 +176,68 @@ export function RivalryRoom({
               </div>
             </div>
 
+            {messages.length === 0 && (
+              <div className="px-5 sm:px-7 py-14 text-center">
+                <p className="text-[15px] font-semibold text-[var(--fg-secondary)]">
+                  No takes yet.
+                </p>
+                <p className="text-[13px] text-[var(--fg-tertiary)] mt-1">
+                  Be the first to drop one and earn First Blood.
+                </p>
+              </div>
+            )}
+
             <div className="divide-y divide-[var(--hairline)]">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className="px-5 sm:px-7 py-5"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[var(--fg)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
-                      {message.team}
-                    </div>
+              {messages.map((message) => {
+                const isOwn = message.authorFanId === fanId
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[13px] font-bold">
-                          {message.user}
-                        </span>
-
-                        <span className="club-pill !py-1 !px-2 !text-[10px]">
-                          ${message.team}
-                        </span>
+                return (
+                  <div key={message.id} className="px-5 sm:px-7 py-5">
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-full bg-[var(--fg)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                        {message.team}
                       </div>
 
-                      <p className="text-[15px] leading-[1.5] mt-2">
-                        {message.text}
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[13px] font-bold">
+                            {message.user}
+                          </span>
 
-                      <div className="flex items-center gap-2 mt-3">
-                        <button
-                          type="button"
-                          onClick={() => voteMessage(message.id)}
-                          className="action-button"
-                        >
-                          🔥
-                          <span>{message.votes}</span>
-                        </button>
+                          <span className="club-pill !py-1 !px-2 !text-[10px]">
+                            ${message.team}
+                          </span>
+                        </div>
 
-                        <button
-                          type="button"
-                          className="action-button"
-                        >
-                          Roast
-                        </button>
+                        <p className="text-[15px] leading-[1.5] mt-2">
+                          {message.text}
+                        </p>
+
+                        <div className="flex items-center gap-2 mt-3">
+                          <button
+                            type="button"
+                            onClick={() => voteMessage(message)}
+                            disabled={isOwn || !message.authorFanId}
+                            title={
+                              isOwn
+                                ? "You can't hype your own take"
+                                : undefined
+                            }
+                            className="action-button disabled:opacity-40 disabled:cursor-not-allowed"
+                          >
+                            🔥
+                            <span>{message.votes}</span>
+                          </button>
+
+                          <button type="button" className="action-button">
+                            Roast
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Composer */}
@@ -239,6 +283,11 @@ export function RivalryRoom({
               The funniest takes rise to the top.
             </p>
 
+            {messages.length === 0 ? (
+              <p className="text-[11px] text-[var(--fg-tertiary)] mt-6">
+                Nothing to rank yet.
+              </p>
+            ) : (
             <div className="space-y-3 mt-6">
               {messages
                 .slice()
@@ -268,6 +317,7 @@ export function RivalryRoom({
                   </div>
                 ))}
             </div>
+            )}
 
             <div className="mt-7 rounded-[16px] bg-[var(--accent-soft)] p-4">
               <p className="text-[11px] font-bold text-[var(--accent)] uppercase tracking-[0.08em]">
