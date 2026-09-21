@@ -32,8 +32,8 @@ export function Leaderboard({
             onClick={() => setScope(tab.code)}
             className={`rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-all duration-150 [transition-timing-function:var(--ease-apple)] active:scale-95 ${
               scope === tab.code
-                ? 'border-[var(--fg)] bg-[var(--fg)] text-white'
-                : 'border-[var(--hairline)] bg-white hover:border-[var(--fg-tertiary)]'
+                ? 'border-[var(--ink)] bg-[var(--ink)] text-white'
+                : 'border-[var(--hairline)] bg-[var(--bg-elevated)] hover:border-[var(--fg-tertiary)]'
             }`}
           >
             {tab.label}
@@ -55,7 +55,7 @@ export function Leaderboard({
                 {index + 1}
               </span>
 
-              <div className="w-8 h-8 rounded-full bg-[var(--fg)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+              <div className="w-8 h-8 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                 {entry.id.slice(0, 2).toUpperCase()}
               </div>
 

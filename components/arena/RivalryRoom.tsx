@@ -114,7 +114,7 @@ export function RivalryRoom({
         Back to rivalries
       </button>
 
-      <div className="rounded-[24px] border border-[var(--hairline)] bg-white overflow-hidden shadow-[0_12px_40px_rgba(16,19,17,0.04)]">
+      <div className="rounded-[24px] border border-[var(--hairline)] bg-[var(--bg-elevated)] overflow-hidden shadow-[0_12px_40px_rgba(16,19,17,0.04)]">
         {/* Room header */}
         <div className="bg-[#101311] text-white px-5 sm:px-7 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
@@ -194,7 +194,7 @@ export function RivalryRoom({
                 return (
                   <div key={message.id} className="px-5 sm:px-7 py-5">
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[var(--fg)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                      <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
                         {message.team}
                       </div>
 
@@ -253,14 +253,14 @@ export function RivalryRoom({
                     }
                   }}
                   placeholder="Drop your take..."
-                  className="flex-1 min-h-[48px] max-h-[120px] resize-none rounded-[16px] border border-[var(--hairline)] bg-white px-4 py-3 text-[14px] outline-none focus:border-[var(--fg)]"
+                  className="flex-1 min-h-[48px] max-h-[120px] resize-none rounded-[16px] border border-[var(--hairline)] bg-[var(--bg-elevated)] px-4 py-3 text-[14px] outline-none focus:border-[var(--fg)]"
                 />
 
                 <button
                   type="button"
                   onClick={sendMessage}
                   disabled={!draft.trim()}
-                  className="w-11 h-11 rounded-full bg-[var(--fg)] text-white flex items-center justify-center disabled:opacity-30 transition-all duration-150 [transition-timing-function:var(--ease-apple)] active:scale-90 disabled:active:scale-100"
+                  className="w-11 h-11 rounded-full bg-[var(--ink)] text-white flex items-center justify-center disabled:opacity-30 transition-all duration-150 [transition-timing-function:var(--ease-apple)] active:scale-90 disabled:active:scale-100"
                   aria-label="Send message"
                 >
                   <Send className="w-4 h-4" />

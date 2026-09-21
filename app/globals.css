@@ -1,22 +1,64 @@
 @import "tailwindcss";
 
+/* next-themes toggles a `.dark` class on <html>; make Tailwind's dark:
+   variant follow that class instead of the OS-level media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --bg: #f6f7f5;
   --bg-elevated: #ffffff;
+  --bg-elevated-translucent: rgba(255, 255, 255, 0.75);
   --fg: #101311;
   --fg-secondary: #69706b;
   --fg-tertiary: #929a94;
   --hairline: #dde1dd;
+
+  /* Fixed brand ink: does NOT flip with theme. For solid dark fills paired
+     with fixed white text/icons (primary buttons, avatar circles, the
+     active nav pill) — as opposed to --fg, which is body text color and
+     is meant to flip. Using --fg for these was the dark-mode bug: the
+     button/avatar backgrounds went near-white while their text stayed
+     hardcoded white. */
+  --ink: #101311;
 
   --accent: #0a9f55;
   --accent-hover: #078847;
   --accent-soft: #e7f6ed;
 
   --orange: #f97316;
+  --scrollbar-thumb: rgba(16, 19, 17, 0.16);
+  --scrollbar-thumb-hover: rgba(16, 19, 17, 0.28);
 
   --radius: 20px;
 
   --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0b0d0c;
+  --bg-elevated: #17191b;
+  --bg-elevated-translucent: rgba(23, 25, 27, 0.75);
+  --fg: #f4f6f4;
+  --fg-secondary: #9aa19c;
+  --fg-tertiary: #676d69;
+  --hairline: #262a27;
+
+  --accent: #22c55e;
+  --accent-hover: #34d872;
+  --accent-soft: rgba(34, 197, 94, 0.16);
+
+  --orange: #fb923c;
+  --scrollbar-thumb: rgba(255, 255, 255, 0.14);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.24);
+
+  color-scheme: dark;
+}
+
+.dark .side-card-dark {
+  background: #000000;
+  border-color: #232823;
 }
 
 * {
@@ -28,7 +70,7 @@
 
 ::selection {
   background: var(--accent-soft);
-  color: #087a42;
+  color: var(--accent);
 }
 
 ::-webkit-scrollbar {
@@ -41,13 +83,13 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 19, 17, 0.16);
+  background: var(--scrollbar-thumb);
   border: 2px solid var(--bg);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 19, 17, 0.28);
+  background: var(--scrollbar-thumb-hover);
 }
 
 html {
@@ -154,6 +196,12 @@ button {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
+.dark .brand-mark {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
 .brand-mark img {
   width: 100%;
   height: 100%;
@@ -184,7 +232,7 @@ button {
 }
 
 .nav-pill-active {
-  background: var(--fg);
+  background: var(--ink);
   color: #ffffff;
 }
 
@@ -213,7 +261,7 @@ button {
   padding: 0 22px;
   border: 0;
   border-radius: 999px;
-  background: var(--fg);
+  background: var(--ink);
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -250,7 +298,7 @@ button {
   padding: 0 18px;
   border: 1px solid var(--hairline);
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--bg-elevated);
   color: var(--fg);
   font-size: 13px;
   font-weight: 700;
@@ -284,7 +332,7 @@ button {
   padding: 0 18px;
   border: 1px solid var(--hairline);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--bg-elevated-translucent);
   box-shadow: 0 8px 30px rgba(16, 19, 17, 0.035);
 }
 
@@ -304,7 +352,7 @@ button {
   padding: 20px;
   border: 1px solid var(--hairline);
   border-radius: 18px;
-  background: #ffffff;
+  background: var(--bg-elevated);
   box-shadow: 0 8px 30px rgba(16, 19, 17, 0.035);
 }
 
@@ -348,7 +396,7 @@ button {
   padding: 6px 11px;
   border-radius: 999px;
   background: var(--accent-soft);
-  color: #087a42;
+  color: var(--accent-hover);
   font-size: 12px;
   font-weight: 800;
   transition: transform 150ms var(--ease-apple);
@@ -386,6 +434,11 @@ button.club-pill:active {
 .action-button.liked {
   background: #fff0f0;
   color: #e5484d;
+}
+
+.dark .action-button.liked {
+  background: rgba(229, 72, 77, 0.16);
+  color: #ff7a7e;
 }
 
 .media-frame {

@@ -8,6 +8,7 @@ import { RivalryCard, type Rivalry } from '@/components/arena/RivalryCard'
 import { RivalryRoom } from '@/components/arena/RivalryRoom'
 import { Leaderboard } from '@/components/identity/Leaderboard'
 import { FanIdentityCard } from '@/components/identity/FanIdentityCard'
+import { ThemeToggle } from '@/components/common/ThemeToggle'
 import { RIVALRIES, getAllClubs } from '@/lib/rivalries'
 
 const CLUBS = getAllClubs(RIVALRIES)
@@ -19,13 +20,17 @@ export default function ArenaPage() {
     <main className="min-h-screen bg-[var(--bg)]">
       {/* Header */}
       <section className="container-apple pt-12 md:pt-20 pb-10">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--fg-secondary)] hover:text-[var(--fg)] transition-colors mb-10"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to the stands
-        </Link>
+        <div className="flex items-center justify-between mb-10">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--fg-secondary)] hover:text-[var(--fg)] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to the stands
+          </Link>
+
+          <ThemeToggle />
+        </div>
 
         {!selected && (
           <div className="max-w-4xl">
@@ -104,7 +109,7 @@ export default function ArenaPage() {
                         .getElementById('ai-roast')
                         ?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-white text-[var(--fg)] px-5 min-h-[44px] text-[13px] font-bold hover:opacity-90 transition-opacity"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-white text-[#101311] px-5 min-h-[44px] text-[13px] font-bold hover:opacity-90 transition-opacity"
                   >
                     <MessageCircle className="w-4 h-4" />
                     Start a roast

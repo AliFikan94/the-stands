@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { RantComposer } from '@/components/rant/RantComposer'
 import { RantFeed, type Rant } from '@/components/rant/RantFeed'
 import { WalletButton } from '@/components/common/WalletButton'
+import { ThemeToggle } from '@/components/common/ThemeToggle'
 
 const TRENDING_CLUBS = [
   ['#PSG', '842 rants'],
@@ -43,14 +44,15 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="sm:hidden">
+            <div className="flex items-center gap-2 sm:hidden">
+              <ThemeToggle />
               <WalletButton compact />
             </div>
           </div>
 
           {/* Main Navigation */}
           <nav
-            className="flex items-center gap-1 self-start rounded-full border border-[var(--hairline)] bg-white/70 p-1 sm:self-auto"
+            className="flex items-center gap-1 self-start rounded-full border border-[var(--hairline)] bg-[var(--bg-elevated)]/70 p-1 sm:self-auto"
             aria-label="Main Navigation"
           >
             <Link
@@ -78,7 +80,8 @@ export default function Home() {
             </button>
           </nav>
 
-          <div className="hidden sm:block">
+          <div className="hidden sm:flex items-center gap-3">
+            <ThemeToggle />
             <WalletButton />
           </div>
         </div>

@@ -7,6 +7,7 @@ import {
   Share2,
   MoreHorizontal,
   Flame,
+  Send,
 } from 'lucide-react'
 
 export type Rant = {
@@ -105,6 +106,12 @@ export function RantFeed({
   )
 }
 
+type Comment = {
+  id: number
+  author: string
+  text: string
+}
+
 function RantCard({
   rant,
   onUpdate,
@@ -114,8 +121,23 @@ function RantCard({
 }) {
   const [liked, setLiked] = useState(false)
   const [shared, setShared] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [commentDraft, setCommentDraft] = useState('')
 
   const likes = (rant.likes || 0) + (liked ? 1 : 0)
+  const commentCount = (rant.comments || 0) + comments.length
+
+  const handlePostComment = () => {
+    const text = commentDraft.trim()
+    if (!text) return
+
+    setComments((current) => [
+      ...current,
+      { id: Date.now(), author: 'You', text },
+    ])
+    setCommentDraft('')
+  }
 
   const handleLike = () => {
     const nextLiked = !liked
@@ -148,7 +170,7 @@ function RantCard({
       <div className="flex items-center justify-between gap-4 px-5 sm:px-7 pt-5">
         <div className="flex items-center gap-3 min-w-0">
           <div 
-            className="w-10 h-10 rounded-full bg-[var(--fg)] text-white flex items-center justify-center text-[11px] font-bold shrink-0"
+            className="w-10 h-10 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[11px] font-bold shrink-0"
             aria-hidden="true"
           >
             {avatarText(rant.owner)}
@@ -235,11 +257,15 @@ function RantCard({
 
           <button
             type="button"
-            className="action-button"
+            onClick={() => setShowComments((current) => !current)}
+            className={`action-button ${
+              showComments ? 'bg-[var(--bg)] text-[var(--fg)]' : ''
+            }`}
             aria-label="Comment on rant"
+            aria-expanded={showComments}
           >
             <MessageCircle className="w-[17px] h-[17px]" />
-            <span>{rant.comments || 0}</span>
+            <span>{commentCount}</span>
           </button>
 
           <button
@@ -260,6 +286,63 @@ function RantCard({
           Own the take
         </button>
       </div>
+
+      {/* Comments */}
+      {showComments && (
+        <div className="border-t border-[var(--hairline)] px-4 sm:px-6 py-4">
+          {comments.length === 0 ? (
+            <p className="text-[13px] text-[var(--fg-tertiary)] py-2">
+              No comments yet. Be the first to reply.
+            </p>
+          ) : (
+            <div className="space-y-3 mb-4">
+              {comments.map((comment) => (
+                <div key={comment.id} className="flex items-start gap-2.5">
+                  <div
+                    className="w-8 h-8 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[10px] font-bold shrink-0"
+                    aria-hidden="true"
+                  >
+                    {comment.author.slice(0, 2).toUpperCase()}
+                  </div>
+
+                  <div className="min-w-0 flex-1 rounded-2xl bg-[var(--bg)] px-3.5 py-2.5">
+                    <p className="text-[12px] font-bold">{comment.author}</p>
+                    <p className="text-[14px] leading-[1.45] mt-0.5">
+                      {comment.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={commentDraft}
+              onChange={(event) => setCommentDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  handlePostComment()
+                }
+              }}
+              placeholder="Reply to this take..."
+              className="flex-1 min-w-0 rounded-full border border-[var(--hairline)] bg-[var(--bg-elevated)] px-4 py-2.5 text-[13px] outline-none focus:border-[var(--fg)]"
+            />
+
+            <button
+              type="button"
+              onClick={handlePostComment}
+              disabled={!commentDraft.trim()}
+              className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center shrink-0 disabled:opacity-30 transition-all duration-150 [transition-timing-function:var(--ease-apple)] active:scale-90 disabled:active:scale-100"
+              aria-label="Post comment"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
     </article>
   )
 }
