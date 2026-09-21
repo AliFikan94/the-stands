@@ -28,7 +28,7 @@ export function RivalryCard({
     <button
       type="button"
       onClick={() => onEnter(rivalry)}
-      className="group w-full text-left rounded-[22px] border border-[var(--hairline)] bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(16,19,17,0.08)]"
+      className="group w-full text-left rounded-[22px] border border-[var(--hairline)] bg-white p-5 transition-all duration-200 [transition-timing-function:var(--ease-apple)] hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(16,19,17,0.08)] active:scale-[0.99] active:duration-100"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">

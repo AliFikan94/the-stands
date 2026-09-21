@@ -21,7 +21,7 @@ export function CommentGate({
 
   if (!hasAccess) {
     return (
-      <div className="card-apple p-10 text-center">
+      <div className="side-card p-10 text-center">
         <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--fg)]/5 flex items-center justify-center">
           <Users className="w-8 h-8 text-[var(--fg-secondary)]" />
         </div>

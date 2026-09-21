@@ -4,7 +4,7 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-export function WalletButton() {
+export function WalletButton({ compact = false }: { compact?: boolean }) {
   const { address, isConnected } = useAccount()
   const { connect, connectors, isPending, error } = useConnect()
   const { disconnect } = useDisconnect()
@@ -33,7 +33,7 @@ export function WalletButton() {
         onClick={handleClick}
         disabled={isPending}
         variant={isConnected ? 'secondary' : 'default'}
-        className="min-w-[150px] sm:min-w-[180px] h-11 sm:h-12 px-5 sm:px-6 rounded-full text-[13px] sm:text-[14px] font-semibold gap-2 border border-[var(--hairline)] shadow-none transition-all duration-150 hover:opacity-90 active:scale-[0.98]"
+        className={`${compact ? 'h-10 px-4' : 'min-w-[150px] sm:min-w-[180px] h-11 sm:h-12 px-5 sm:px-6'} rounded-full text-[13px] sm:text-[14px] font-semibold gap-2 border border-[var(--hairline)] shadow-none transition-all duration-150 [transition-timing-function:var(--ease-apple)] hover:opacity-90 active:scale-[0.98]`}
       >
         {isConnected && address ? (
           <>
@@ -48,7 +48,7 @@ export function WalletButton() {
         ) : (
           <>
             <Wallet className="w-4 h-4 shrink-0" />
-            <span>{isPending ? 'Connecting...' : 'Connect wallet'}</span>
+            <span>{isPending ? 'Connecting...' : compact ? 'Connect' : 'Connect wallet'}</span>
           </>
         )}
       </Button>

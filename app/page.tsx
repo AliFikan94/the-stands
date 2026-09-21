@@ -26,25 +26,31 @@ export default function Home() {
     <div className="min-h-screen bg-[var(--bg)]">
       {/* Navigation */}
       <header className="sticky top-0 z-50 border-b border-[var(--hairline)] bg-[var(--bg)]/85 backdrop-blur-2xl">
-        <div className="container-apple-wide h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="brand-mark">
-              <img src="/images/standup.png" alt="TheStands" />
+        <div className="container-apple-wide flex flex-col gap-3 py-3 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:py-0">
+          <div className="flex items-center justify-between gap-3 sm:justify-start">
+            <div className="flex items-center gap-3">
+              <div className="brand-mark">
+                <img src="/images/standup.png" alt="TheStands" />
+              </div>
+
+              <div>
+                <div className="text-[17px] font-semibold tracking-[-0.03em]">
+                  TheStands
+                </div>
+                <div className="hidden sm:block text-[10px] uppercase tracking-[0.16em] text-[var(--fg-tertiary)]">
+                  Football. Unfiltered.
+                </div>
+              </div>
             </div>
 
-            <div>
-              <div className="text-[17px] font-semibold tracking-[-0.03em]">
-                TheStands
-              </div>
-              <div className="hidden sm:block text-[10px] uppercase tracking-[0.16em] text-[var(--fg-tertiary)]">
-                Football. Unfiltered.
-              </div>
+            <div className="sm:hidden">
+              <WalletButton compact />
             </div>
           </div>
 
           {/* Main Navigation */}
           <nav
-            className="flex items-center gap-1 rounded-full border border-[var(--hairline)] bg-white/70 p-1"
+            className="flex items-center gap-1 self-start rounded-full border border-[var(--hairline)] bg-white/70 p-1 sm:self-auto"
             aria-label="Main Navigation"
           >
             <Link
@@ -72,7 +78,9 @@ export default function Home() {
             </button>
           </nav>
 
-          <WalletButton />
+          <div className="hidden sm:block">
+            <WalletButton />
+          </div>
         </div>
       </header>
 

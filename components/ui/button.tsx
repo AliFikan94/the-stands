@@ -8,7 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button({ className, variant = 'default', ...props }: ButtonProps) {
   const base =
-    "inline-flex items-center justify-center gap-2 transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed"
+    "inline-flex items-center justify-center gap-2 transition-all duration-200 [transition-timing-function:var(--ease-apple)] active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
 
   const styles =
     variant === 'default'

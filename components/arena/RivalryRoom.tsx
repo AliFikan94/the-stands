@@ -216,7 +216,7 @@ export function RivalryRoom({
                   type="button"
                   onClick={sendMessage}
                   disabled={!draft.trim()}
-                  className="w-11 h-11 rounded-full bg-[var(--fg)] text-white flex items-center justify-center disabled:opacity-30 transition-opacity"
+                  className="w-11 h-11 rounded-full bg-[var(--fg)] text-white flex items-center justify-center disabled:opacity-30 transition-all duration-150 [transition-timing-function:var(--ease-apple)] active:scale-90 disabled:active:scale-100"
                   aria-label="Send message"
                 >
                   <Send className="w-4 h-4" />
