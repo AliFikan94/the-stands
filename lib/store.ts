@@ -7,6 +7,7 @@ import {
   type Badge,
 } from './points'
 import { simulateFanTokenBalance } from './fanToken'
+import { FAN_TOKEN_VERIFICATION_ENABLED } from './featureFlags'
 
 export type FanProfile = {
   id: string
@@ -75,7 +76,10 @@ function pointsFor(action: keyof typeof BASE_POINTS, verified: boolean) {
 }
 
 // A fixture has two clubs; the multiplier applies if the fan is verified
-// for either one.
+// for either one. In practice this is currently always false: verifyClub()
+// is gated off by FAN_TOKEN_VERIFICATION_ENABLED, so verifiedClubs never
+// gets populated. Left intact (not deleted) so re-enabling verification
+// immediately brings the multiplier back with it.
 function isVerifiedForFixture(profile: FanProfile, clubs?: string[]) {
   return Boolean(clubs?.some((club) => profile.verifiedClubs.includes(club)))
 }
@@ -167,6 +171,11 @@ export async function recordCheckIn(id: string, clubs?: string[]) {
 
 export async function verifyClub(id: string, address: string, club: string) {
   const profile = await getFan(id)
+
+  if (!FAN_TOKEN_VERIFICATION_ENABLED) {
+    return { verified: false, balance: 0, profile, newBadges: [] }
+  }
+
   const balance = simulateFanTokenBalance(address, club)
   const verified = balance >= 100
 

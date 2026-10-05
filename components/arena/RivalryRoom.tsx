@@ -137,8 +137,7 @@ export function RivalryRoom({
                 {tier && (
                   <span className="text-white/40">
                     {' '}
-                    · You&apos;re in as {tier.name} · verified{' '}
-                    {rivalry.homeShort}/{rivalry.awayShort} fans earn 1.25x
+                    · You&apos;re in as {tier.name}
                   </span>
                 )}
               </p>

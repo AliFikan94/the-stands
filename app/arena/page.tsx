@@ -51,8 +51,7 @@ export default function ArenaPage() {
             <p className="body-apple text-[var(--fg-secondary)] max-w-2xl mt-6">
               Rivalry rooms where football fans argue, react, roast and
               defend their colours in real time. Check in, post takes, get
-              reactions and climb the leaderboard — verify your Fan Token to
-              earn faster in your club&apos;s fixtures.
+              reactions and climb the leaderboard.
             </p>
           </div>
         )}

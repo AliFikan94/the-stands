@@ -6,6 +6,7 @@ import { useFanProfile } from '@/hooks/useFanProfile'
 import { getBadge } from '@/lib/points'
 import { FanBadge } from './FanBadge'
 import { ClubGlyph, hasCustomCrest } from '@/components/common/ClubGlyph'
+import { FAN_TOKEN_VERIFICATION_ENABLED } from '@/lib/featureFlags'
 
 export function FanIdentityCard({
   clubs,
@@ -65,7 +66,7 @@ export function FanIdentityCard({
         </p>
       )}
 
-      {clubs.length > 0 && (
+      {FAN_TOKEN_VERIFICATION_ENABLED && clubs.length > 0 && (
         <div className="mt-5 pt-4 border-t border-[var(--hairline)]">
           <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--fg-tertiary)] mb-3">
             Club identity

@@ -6,6 +6,7 @@ import { useAccount, useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { type Rant } from './RantFeed'
 import { ClubGlyph, hasGlyph } from '@/components/common/ClubGlyph'
+import { MINTING_ENABLED } from '@/lib/featureFlags'
 
 const CONTRACT_ADDRESS =
   '0xb6aC163AfCD00C975FC1E6efe4a6391F54188E00'
@@ -245,19 +246,21 @@ export function RantComposer({
         </label>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleMint}
-            disabled={
-              !address ||
-              !content.trim() ||
-              tickers.length === 0 ||
-              isMinting
-            }
-            className="btn-secondary"
-          >
-            {isMinting ? 'Minting...' : 'Mint · 1 CHZ'}
-          </button>
+          {MINTING_ENABLED && (
+            <button
+              type="button"
+              onClick={handleMint}
+              disabled={
+                !address ||
+                !content.trim() ||
+                tickers.length === 0 ||
+                isMinting
+              }
+              className="btn-secondary"
+            >
+              {isMinting ? 'Minting...' : 'Mint · 1 CHZ'}
+            </button>
+          )}
 
           <button
             type="button"
