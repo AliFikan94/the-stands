@@ -9,6 +9,7 @@ import {
   Flame,
   Send,
 } from 'lucide-react'
+import { ClubGlyph, hasGlyph } from '@/components/common/ClubGlyph'
 
 export type Rant = {
   tokenId?: string
@@ -217,11 +218,15 @@ function RantCard({
         </p>
 
         <div className="flex flex-wrap gap-2 mt-4">
-          {rant.tickers.map((ticker) => (
-            <span key={ticker} className="club-pill">
-              {ticker}
-            </span>
-          ))}
+          {rant.tickers.map((ticker) => {
+            const code = ticker.replace('$', '')
+            return (
+              <span key={ticker} className="club-pill">
+                {hasGlyph(code) && <ClubGlyph code={code} size={13} />}
+                {ticker}
+              </span>
+            )
+          })}
         </div>
       </div>
 

@@ -15,7 +15,7 @@ import { useAwardUpvote } from '@/hooks/useLeaderboard'
 import { BadgeUnlockToast } from '@/components/identity/BadgeUnlockToast'
 import type { Badge } from '@/lib/points'
 import { formatFanId } from '@/lib/utils'
-import { getClub } from '@/lib/clubs'
+import { ClubGlyph } from '@/components/common/ClubGlyph'
 
 type Message = {
   id: number
@@ -125,10 +125,11 @@ export function RivalryRoom({
                 Live Arena
               </div>
 
-              <h2 className="text-[26px] sm:text-[32px] font-bold tracking-[-0.04em] mt-2">
-                {getClub(rivalry.homeShort)?.emoji}{' '}
+              <h2 className="text-[26px] sm:text-[32px] font-bold tracking-[-0.04em] mt-2 inline-flex items-center flex-wrap gap-2">
+                <ClubGlyph code={rivalry.homeShort} size={28} />
                 {rivalry.home} <span className="text-white/30">vs</span>{' '}
-                {rivalry.away} {getClub(rivalry.awayShort)?.emoji}
+                {rivalry.away}
+                <ClubGlyph code={rivalry.awayShort} size={28} />
               </h2>
 
               <p className="text-[13px] text-white/55 mt-2">
@@ -196,8 +197,8 @@ export function RivalryRoom({
                 return (
                   <div key={message.id} className="px-5 sm:px-7 py-5">
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center text-[15px] shrink-0">
-                        {getClub(message.team)?.emoji ?? message.team}
+                      <div className="w-9 h-9 rounded-full bg-[var(--ink)] text-white flex items-center justify-center shrink-0">
+                        <ClubGlyph code={message.team} size={15} />
                       </div>
 
                       <div className="min-w-0 flex-1">
@@ -206,8 +207,8 @@ export function RivalryRoom({
                             {message.user}
                           </span>
 
-                          <span className="club-pill !py-1 !px-2 !text-[10px]">
-                            ${message.team}
+                          <span className="club-pill !py-1 !px-2 !text-[10px] !gap-1">
+                            <ClubGlyph code={message.team} size={11} />${message.team}
                           </span>
                         </div>
 

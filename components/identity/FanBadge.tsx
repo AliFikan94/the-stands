@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactNode } from 'react'
 import { Lock } from 'lucide-react'
 import type { BadgeTier } from '@/lib/points'
 
@@ -15,6 +15,7 @@ export function FanBadge({
   label,
   monogram,
   emoji,
+  glyph,
   accentColor,
   size = 112,
   locked = false,
@@ -23,6 +24,8 @@ export function FanBadge({
   label?: string
   monogram: string
   emoji?: string
+  /** A custom rendered icon (e.g. a club crest) — takes priority over emoji/monogram. */
+  glyph?: ReactNode
   accentColor?: string
   size?: number
   locked?: boolean
@@ -111,6 +114,10 @@ export function FanBadge({
           <div className="absolute inset-0 rounded-full flex items-center justify-center">
             {locked ? (
               <Lock className="w-1/3 h-1/3 text-white/70" strokeWidth={2.2} />
+            ) : glyph ? (
+              <div className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)] flex items-center justify-center">
+                {glyph}
+              </div>
             ) : emoji ? (
               <span
                 className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"

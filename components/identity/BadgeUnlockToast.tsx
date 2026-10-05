@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import type { Badge } from '@/lib/points'
 import { FanBadge } from './FanBadge'
+import { ClubGlyph, hasCustomCrest } from '@/components/common/ClubGlyph'
 
 export function BadgeUnlockToast({
   badges,
@@ -30,6 +31,11 @@ export function BadgeUnlockToast({
             tier={badge.tier}
             monogram={badge.name.slice(0, 2).toUpperCase()}
             emoji={badge.emoji}
+            glyph={
+              badge.club && hasCustomCrest(badge.club) ? (
+                <ClubGlyph code={badge.club} size={22} variant="tone" />
+              ) : undefined
+            }
             size={44}
           />
           <div>

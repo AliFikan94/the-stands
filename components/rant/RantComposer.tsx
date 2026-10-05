@@ -5,6 +5,7 @@ import { Image as ImageIcon, X } from 'lucide-react'
 import { useAccount, useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { type Rant } from './RantFeed'
+import { ClubGlyph, hasGlyph } from '@/components/common/ClubGlyph'
 
 const CONTRACT_ADDRESS =
   '0xb6aC163AfCD00C975FC1E6efe4a6391F54188E00'
@@ -189,17 +190,21 @@ export function RantComposer({
 
         <div className="flex items-center justify-between gap-3 border-t border-[var(--hairline)] py-3">
           <div className="flex items-center gap-2 min-w-0">
-            {tickers.map((ticker) => (
-              <button
-                key={ticker}
-                type="button"
-                onClick={() => removeTicker(ticker)}
-                className="club-pill shrink-0"
-              >
-                {ticker}
-                <X className="w-3 h-3" />
-              </button>
-            ))}
+            {tickers.map((ticker) => {
+              const code = ticker.replace('$', '')
+              return (
+                <button
+                  key={ticker}
+                  type="button"
+                  onClick={() => removeTicker(ticker)}
+                  className="club-pill shrink-0"
+                >
+                  {hasGlyph(code) && <ClubGlyph code={code} size={13} />}
+                  {ticker}
+                  <X className="w-3 h-3" />
+                </button>
+              )
+            })}
 
             {tickers.length < 2 && (
               <input

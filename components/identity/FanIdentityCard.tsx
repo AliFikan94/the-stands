@@ -5,6 +5,7 @@ import { ShieldCheck } from 'lucide-react'
 import { useFanProfile } from '@/hooks/useFanProfile'
 import { getBadge } from '@/lib/points'
 import { FanBadge } from './FanBadge'
+import { ClubGlyph, hasCustomCrest } from '@/components/common/ClubGlyph'
 
 export function FanIdentityCard({
   clubs,
@@ -48,6 +49,11 @@ export function FanIdentityCard({
           label={topBadge?.name || 'No badge yet'}
           monogram={topBadge ? topBadge.name.slice(0, 2).toUpperCase() : '?'}
           emoji={topBadge?.emoji}
+          glyph={
+            topBadge?.club && hasCustomCrest(topBadge.club) ? (
+              <ClubGlyph code={topBadge.club} size={52} variant="tone" />
+            ) : undefined
+          }
           locked={!topBadge}
           size={104}
         />
@@ -73,6 +79,11 @@ export function FanIdentityCard({
                 label={club.nickname}
                 monogram={club.code}
                 emoji={club.emoji}
+                glyph={
+                  hasCustomCrest(club.code) ? (
+                    <ClubGlyph code={club.code} size={36} variant="tone" />
+                  ) : undefined
+                }
                 accentColor={club.color}
                 locked={!verifiedClubs.includes(club.code)}
                 size={72}
