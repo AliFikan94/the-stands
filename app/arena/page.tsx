@@ -9,6 +9,7 @@ import { RivalryRoom } from '@/components/arena/RivalryRoom'
 import { Leaderboard } from '@/components/identity/Leaderboard'
 import { FanIdentityCard } from '@/components/identity/FanIdentityCard'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
+import { AccountButton } from '@/components/common/AccountButton'
 import { RIVALRIES, getAllClubs } from '@/lib/rivalries'
 
 const CLUBS = getAllClubs(RIVALRIES)
@@ -29,7 +30,10 @@ export default function ArenaPage() {
             Back to the stands
           </Link>
 
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <AccountButton compact />
+          </div>
         </div>
 
         {!selected && (

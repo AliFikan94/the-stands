@@ -11,25 +11,44 @@ const hasKv = Boolean(
   process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN
 )
 
-const memoryStore = new Map<string, unknown>()
+type MemoryEntry = { value: unknown; expiresAt: number | null }
+
+const memoryStore = new Map<string, MemoryEntry>()
 
 type SimpleKv = {
   get<T>(key: string): Promise<T | null>
-  set(key: string, value: unknown): Promise<unknown>
+  /** ttlSeconds: auto-expire the key (e.g. a sign-in nonce or OTP). */
+  set(key: string, value: unknown, ttlSeconds?: number): Promise<unknown>
+  del(key: string): Promise<unknown>
 }
 
-async function loadVercelKv(): Promise<SimpleKv> {
+async function loadVercelKv() {
   const { kv } = await import('@vercel/kv')
   return kv
 }
 
 const memoryKv: SimpleKv = {
   async get<T>(key: string) {
-    return memoryStore.has(key) ? (memoryStore.get(key) as T) : null
+    const entry = memoryStore.get(key)
+    if (!entry) return null
+
+    if (entry.expiresAt !== null && entry.expiresAt < Date.now()) {
+      memoryStore.delete(key)
+      return null
+    }
+
+    return entry.value as T
   },
-  async set(key: string, value: unknown) {
-    memoryStore.set(key, value)
+  async set(key: string, value: unknown, ttlSeconds?: number) {
+    memoryStore.set(key, {
+      value,
+      expiresAt: ttlSeconds ? Date.now() + ttlSeconds * 1000 : null,
+    })
     return 'OK'
+  },
+  async del(key: string) {
+    memoryStore.delete(key)
+    return 1
   },
 }
 
@@ -38,8 +57,14 @@ export const kv: SimpleKv = hasKv
       async get(key) {
         return (await loadVercelKv()).get(key)
       },
-      async set(key, value) {
-        return (await loadVercelKv()).set(key, value)
+      async set(key, value, ttlSeconds) {
+        const client = await loadVercelKv()
+        return ttlSeconds
+          ? client.set(key, value, { ex: ttlSeconds })
+          : client.set(key, value)
+      },
+      async del(key) {
+        return (await loadVercelKv()).del(key)
       },
     }
   : memoryKv

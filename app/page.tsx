@@ -6,6 +6,7 @@ import { RantComposer } from '@/components/rant/RantComposer'
 import { RantFeed, type Rant } from '@/components/rant/RantFeed'
 import { WalletButton } from '@/components/common/WalletButton'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
+import { AccountButton } from '@/components/common/AccountButton'
 
 const TRENDING_CLUBS = [
   ['#PSG', '842 rants'],
@@ -46,7 +47,7 @@ export default function Home() {
 
             <div className="flex items-center gap-2 sm:hidden">
               <ThemeToggle />
-              <WalletButton compact />
+              <AccountButton compact />
             </div>
           </div>
 
@@ -83,6 +84,7 @@ export default function Home() {
           <div className="hidden sm:flex items-center gap-3">
             <ThemeToggle />
             <WalletButton />
+            <AccountButton />
           </div>
         </div>
       </header>
